@@ -1,0 +1,54 @@
+{
+    "version": "0.2",
+    "language": "en",
+    "enabledLanguageIds": [
+        "c"
+    ],
+    "ignorePaths": [
+        ".cspell.json",
+        ".github/workflows/**",
+        ".vscode/*.json",
+        "**/*.{json,snap}"
+    ],
+    "dictionaries": [
+        "cpp",
+        "softwareTerms",
+        "en_US",
+        "misc",
+        "filetypes"
+    ],
+    "ignoreRegExpList": [],
+    "words": [
+        "BSLS",
+        "BSPC",
+        "BUILDDATE",
+        "Gondolindrim",
+        "keebs",
+        "keycodes",
+        "keymaps",
+        "keyrecord",
+        "LALT",
+        "LBRC",
+        "LCTL",
+        "LGUI",
+        "LSFT",
+        "MNXT",
+        "MPLY",
+        "MPRV",
+        "PGDN",
+        "PGUP",
+        "PROGMEM",
+        "RALT",
+        "RBRC",
+        "RCTL",
+        "RGHT",
+        "RSFT",
+        "SCLN",
+        "SLSH",
+        "TILD",
+        "TRNS",
+        "VOLD",
+        "VOLU"
+    ],
+    "overrides": []
+}

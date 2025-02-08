@@ -8,7 +8,7 @@ build sonnet: `qmk compile`
 full build sonnet: `qmk compile -kb mode/m75h -km mariolopjr`
 build envoy: `qmk compile -kb mode/m256wh`
 flash sonnet: `qmk flash`
-flash sonnet: `qmk flash -kb mode/m256wh`
+flash envoy: `qmk flash -kb mode/m256wh`
 
 ## update
 Quick instructions in updating from upstream

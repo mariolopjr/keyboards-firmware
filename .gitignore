@@ -14,3 +14,9 @@
 compile_commands.json
 .clangd/
 .cache/
+
+# python
+.venv
+
+# neovim
+.session.nvim

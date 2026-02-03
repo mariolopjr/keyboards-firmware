@@ -1,0 +1,12 @@
+[tools]
+python = "3.14"
+uv = "latest"
+
+[settings]
+python.uv_venv_auto = true
+
+[env]
+_.path = [
+    "/opt/homebrew/opt/arm-none-eabi-gcc@8/bin",
+    "/opt/homebrew/opt/arm-none-eabi-binutils/bin",
+]

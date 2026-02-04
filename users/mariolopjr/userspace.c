@@ -27,14 +27,21 @@
  */
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        // Prints firmware info
-        case VRSN: // Prints firmware version
+        case VRSN:
             if (record->event.pressed) {
                 send_string_with_delay_P(PSTR(QMK_KEYBOARD "/" QMK_KEYMAP " @ " QMK_VERSION " | " QMK_BUILDDATE), MACRO_TIMER);
             }
-            return false;
+            break;
+
+        case SCL2:
+            if (record->event.pressed) {
+                tap_code(KC_SCRL);
+                tap_code(KC_SCRL);
+            }
+            break;
 
         default:
             return true;
     }
+    return true;
 }

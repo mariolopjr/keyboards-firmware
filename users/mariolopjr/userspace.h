@@ -23,6 +23,5 @@
 
 enum userspace_custom_keycodes {
     VRSN = SAFE_RANGE, // Prints QMK Firmware and board info
-    SCL2,              // Sends Scroll Lock twice to toggle KM
     NEW_SAFE_RANGE
 };

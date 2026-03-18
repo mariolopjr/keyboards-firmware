@@ -33,13 +33,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             break;
 
-        case SCL2:
-            if (record->event.pressed) {
-                tap_code(KC_SCRL);
-                tap_code(KC_SCRL);
-            }
-            break;
-
         default:
             return true;
     }

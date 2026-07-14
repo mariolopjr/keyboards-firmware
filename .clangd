@@ -1,4 +1,7 @@
 CompileFlags:
-  Add: [-Wno-unknown-attributes, -Wno-maybe-uninitialized, -Wno-unknown-warning-option]
-  Remove: [-W*, -mmcu=*, -mcpu=*, -mfpu=*, -mfloat-abi=*, -mno-unaligned-access, -mno-thumb-interwork, -mcall-prologues, -D__has_include*]
   Compiler: clang
+  Add: [--target=arm-none-eabi, -Wno-unknown-attributes, -Wno-unknown-warning-option]
+  # -D__* drops the predefined-macro dump qmk bakes into compile_commands.json. it is
+  # probed without -std, so on gcc 15 it forces __STDC_VERSION__ to C23 while the build
+  # is gnu11, and clang's stdbool.h then leaves bool and true undefined
+  Remove: [-W*, -D__*, -mmcu=*, -mno-thumb-interwork, -mcall-prologues, -fsingle-precision-constant]

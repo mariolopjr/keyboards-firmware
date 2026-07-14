@@ -29,15 +29,20 @@ This is a template repository which allows for an external set of QMK keymaps to
 
 ## Howto build locally
 
+Everything is driven by [`just`](https://just.systems). Run `just` on its own to list the recipes.
+
 1. Run the normal `qmk setup` procedure if you haven't already done so -- see [QMK Docs](https://docs.qmk.fm/#/newbs) for details.
 1. Fork this repository
 1. Clone your fork to your local machine
 1. `cd` into this repository's clone directory
-1. Set global userspace path: `qmk config user.overlay_dir="$(realpath .)"` -- you MUST be located in the cloned userspace location for this to work correctly
-    * This will be automatically detected if you've `cd`ed into your userspace repository, but the above makes your userspace available regardless of your shell location.
-1. Compile normally: `qmk compile -kb your_keyboard -km your_keymap` or `make your_keyboard:your_keymap`
+1. `just setup` to clone the `qmk_firmware` submodule
+1. `just all` to compile every build target in `qmk.json`
 
-Alternatively, if you configured your build targets above, you can use `qmk userspace-compile` to build all of your userspace targets at once.
+The keyboard and keymap default to `user.keyboard` and `user.keymap` in `qmk.ini`, so neither needs to be passed. Pass a keyboard to override it (`just flash mode/m256wh`) and any extra flags go straight through to the QMK CLI, so `just compile mode/m256wh -km experiment -j 8` and `just compile -j 8` both work.
+
+## Howto get symbols resolving in an editor
+
+clangd reads `compile_commands.json`, which is generated and gitignored: QMK bakes the include paths and predefined macros of whichever `arm-none-eabi-gcc` was on `PATH` straight into it. Run `just compiledb` to build it and run it again whenever the toolchain or the build config changes.
 
 ## Extra info
 
@@ -54,6 +59,4 @@ If you wish to manually manage `qmk_firmware` using git within the userspace rep
 
 This can also be used to control which fork is used, though only upstream `qmk_firmware` will have support for external userspace until other manufacturers update their forks.
 
-1. (First time only) `git submodule add https://github.com/qmk/qmk_firmware.git`
-1. (To update) `git submodule update --init --recursive`
-1. Commit your changes to your userspace repository
+`qmk_firmware` is already tracked as a submodule here. `just setup` initializes it, and `just update` pulls the latest commit from upstream and updates its nested submodules. Commit the new revision afterwards to pin it.

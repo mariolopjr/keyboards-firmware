@@ -1,0 +1,53 @@
+[keyboard]
+name = "m75h"
+product_name = "m75h"
+manufacturer = "Mode"
+vendor_id = 0x00DE
+product_id = 0x7572
+chip = "stm32f401rc"
+
+[matrix]
+# COL2ROW: row_pins are read, col_pins are driven
+row_pins = ["PC5", "PB0", "PB14", "PB15", "PA8", "PC9", "PA15"]
+col_pins = ["PC8", "PC7", "PA10", "PB13", "PB12", "PB10", "PB1", "PC10", "PC11", "PD2", "PC12", "PB3", "PB4", "PB5", "PB8", "PB9"]
+
+[layout]
+rows = 7
+cols = 16
+layers = 2
+keymap = [
+    # layer 0: base
+    [
+        ["Escape", "F1", "F2", "F3", "F4", "_", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "_", "F13"],
+        ["Grave", "Kc1", "Kc2", "Kc3", "Kc4", "Kc5", "Kc6", "Kc7", "Kc8", "Kc9", "Kc0", "Minus", "Equal", "Backspace", "_", "Delete"],
+        ["Tab", "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "LeftBracket", "RightBracket", "_", "Backslash", "PageUp"],
+        ["Escape", "A", "S", "D", "F", "G", "H", "J", "K", "L", "Semicolon", "Quote", "_", "_", "Enter", "PageDown"],
+        ["LShift", "_", "Z", "X", "C", "V", "B", "N", "M", "Comma", "Dot", "Slash", "RShift", "_", "Up", "End"],
+        ["LCtrl", "LAlt", "LGui", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_"],
+        ["_", "_", "_", "_", "_", "_", "Space", "_", "_", "_", "_", "MO(1)", "_", "Left", "Down", "Right"]
+    ],
+    # layer 1: Fn (hold Fn / MO(1))
+    [
+        ["Bootloader", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_"],
+        ["_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "AudioMute"],
+        ["_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "AudioVolUp"],
+        ["_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "AudioVolDown"],
+        ["_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "MediaPlayPause"],
+        ["_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_"],
+        ["_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "MediaPrevTrack", "_", "MediaNextTrack"]
+    ],
+]
+
+[storage]
+enabled = false
+
+[dependency]
+defmt_log = false
+
+[host]
+vial_enabled = false
+
+# 8 MHz HSE crystal -> 84 MHz sysclk, 48 MHz USB
+# GENERIC_STM32_F401XC defaults produce (PLLM=4, PLLN=168, PLLP=4, PLLQ=7)
+[chip.stm32f401rc]
+hse_mhz = 8

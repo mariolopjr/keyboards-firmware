@@ -1,0 +1,7 @@
+# Rust itself is pinned by rust-toolchain.toml (rustup installs the channel,
+# the thumbv7em-none-eabihf target, and llvm-tools automatically).
+# These are the extra host tools needed to build and flash.
+[tools]
+"cargo:flip-link" = "latest"
+"cargo:cargo-binutils" = "latest"
+# dfu-util is a system package: `brew install dfu-util`

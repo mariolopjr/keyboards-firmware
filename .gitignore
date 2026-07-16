@@ -1,33 +1,18 @@
-# Junk files
-*.bak
-*.swp
-*~
+# Rust build artifacts
+/target
+**/target
+
+# Firmware output
+*.bin
+*.hex
+*.uf2
+
+# macOS
 .DS_Store
 ._*
 
-# Firmware files
-*.hex
-*.bin
-*.uf2
-
-# clangd
-compile_commands.json
-.clangd/
-.cache/
-
-# python
-.venv
-
-# neovim
+# Editor
+*.bak
+*.swp
+*~
 .session.nvim
-
-# Devenv
-.devenv*
-devenv.local.nix
-devenv.local.yaml
-
-# direnv
-.direnv
-
-# pre-commit
-.pre-commit-config.yaml

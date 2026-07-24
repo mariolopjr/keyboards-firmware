@@ -1,0 +1,51 @@
+[keyboard]
+name = "m256wh"
+product_name = "m256wh"
+manufacturer = "Mode"
+vendor_id = 0x00DE
+product_id = 0x5754
+chip = "stm32f401rc"
+
+[matrix]
+# COL2ROW: row_pins are read, col_pins are driven
+row_pins = ["PC6", "PC7", "PC8", "PC12", "PA7", "PC5"]
+col_pins = ["PC9", "PB1", "PB0", "PA10", "PA15", "PC10", "PC11", "PD2", "PB3", "PB4", "PB8", "PB9", "PC0", "PC1", "PC2", "PC4"]
+
+[layout]
+rows = 6
+cols = 16
+layers = 2
+keymap = [
+    # layer 0
+    [
+        ["Grave", "Kc1", "Kc2", "Kc3", "Kc4", "Kc5", "Kc6", "Kc7", "Kc8", "Kc9", "Kc0", "Minus", "Equal", "Backspace", "Delete", "_"],
+        ["Tab", "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "LeftBracket", "RightBracket", "Backslash", "PageUp", "_"],
+        ["Escape", "A", "S", "D", "F", "G", "H", "J", "K", "L", "Semicolon", "Quote", "_", "Enter", "PageDown", "_"],
+        ["LShift", "_", "Z", "X", "C", "V", "B", "N", "M", "Comma", "Dot", "Slash", "RShift", "Up", "End", "_"],
+        ["_", "_", "_", "_", "_", "_", "_", "_", "_", "RAlt", "MO(1)", "Left", "Down", "Right", "_", "_"],
+        ["LCtrl", "LAlt", "LGui", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "Space"]
+    ],
+    # layer 1
+    [
+        ["Bootloader", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "_", "AudioMute", "_"],
+        ["_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "AudioVolUp", "_"],
+        ["_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "AudioVolDown", "_"],
+        ["_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "MediaPlayPause", "_"],
+        ["_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "MediaPrevTrack", "_", "MediaNextTrack", "_", "_"],
+        ["_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_"]
+    ]
+]
+
+[storage]
+enabled = false
+
+[dependency]
+defmt_log = false
+
+[host]
+vial_enabled = false
+
+# 8 MHz HSE crystal -> 84 MHz sysclk, 48 MHz USB
+# GENERIC_STM32_F401XC defaults produce (PLLM=4, PLLN=168, PLLP=4, PLLQ=7)
+[chip.stm32f401rc]
+hse_mhz = 8

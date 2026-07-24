@@ -1,0 +1,45 @@
+[package]
+name = "m256wh"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "RMK firmware for the Mode m256wh (Envoy) keyboard"
+
+[dependencies]
+# `storage` is excluded: on the stm32f401rc the whole-flash driver reports a
+# 128K ERASE_SIZE, so RMK's minimum 2 sectors covers all 256K and erase_all()
+# wipes the running firmware on first boot
+# local fork (branch mariolopjr/add-smt32-bootloader-reboot-support) carrying
+# `register_bootloader_jump`, the keypress-time hook the DFU handoff needs.
+rmk = { path = "../../rmk/rmk", default-features = false }
+cortex-m = { version = "0.7.7", features = ["critical-section-single-core"] }
+cortex-m-rt = "0.7.5"
+embassy-time = { version = "0.5", features = ["tick-hz-32_768"] }
+embassy-stm32 = { version = "0.4", features = [
+    "stm32f401rc",
+    "memory-x",
+    "exti",
+    "time-driver-any",
+] }
+embassy-executor = { version = "0.9", features = [
+    "arch-cortex-m",
+    "executor-thread",
+] }
+static_cell = "2"
+defmt = "1"
+panic-probe = "1"
+
+[profile.dev]
+codegen-units = 1
+debug = true
+opt-level = 1
+overflow-checks = true
+lto = false
+panic = "unwind"
+
+[profile.release]
+codegen-units = 1
+debug = true            # symbols only, no runtime cost on bare metal
+opt-level = "z"         # optimize for size
+overflow-checks = false
+lto = "fat"

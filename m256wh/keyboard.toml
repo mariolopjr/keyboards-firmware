@@ -20,7 +20,7 @@ keymap = [
     [
         ["Grave", "Kc1", "Kc2", "Kc3", "Kc4", "Kc5", "Kc6", "Kc7", "Kc8", "Kc9", "Kc0", "Minus", "Equal", "Backspace", "Delete", "_"],
         ["Tab", "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "LeftBracket", "RightBracket", "Backslash", "PageUp", "_"],
-        ["Escape", "A", "S", "D", "F", "G", "H", "J", "K", "L", "Semicolon", "Quote", "_", "Enter", "PageDown", "_"],
+        ["MT(Escape, LCtrl, nav)", "A", "S", "D", "F", "G", "H", "J", "K", "L", "Semicolon", "Quote", "_", "Enter", "PageDown", "_"],
         ["LShift", "_", "Z", "X", "C", "V", "B", "N", "M", "Comma", "Dot", "Slash", "RShift", "Up", "End", "_"],
         ["_", "_", "_", "_", "_", "_", "_", "_", "_", "RAlt", "MO(1)", "Left", "Down", "Right", "_", "_"],
         ["LCtrl", "LAlt", "LGui", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "Space"]
@@ -35,6 +35,16 @@ keymap = [
         ["_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_"]
     ]
 ]
+
+[behavior.morse]
+enable_flow_tap = true
+prior_idle_time = "100ms"
+
+[behavior.morse.profiles.nav]
+# any other key pressed while Caps is held resolves it to Ctrl immediately
+hold_on_other_press = true
+# holding Caps this long resolves to Ctrl
+hold_timeout = "150ms"
 
 [storage]
 enabled = false

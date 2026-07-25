@@ -21,7 +21,7 @@ keymap = [
         ["Escape", "F1", "F2", "F3", "F4", "_", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "_", "F13"],
         ["Grave", "Kc1", "Kc2", "Kc3", "Kc4", "Kc5", "Kc6", "Kc7", "Kc8", "Kc9", "Kc0", "Minus", "Equal", "Backspace", "_", "Delete"],
         ["Tab", "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "LeftBracket", "RightBracket", "_", "Backslash", "PageUp"],
-        ["Escape", "A", "S", "D", "F", "G", "H", "J", "K", "L", "Semicolon", "Quote", "_", "_", "Enter", "PageDown"],
+        ["MT(Escape, LCtrl, nav)", "A", "S", "D", "F", "G", "H", "J", "K", "L", "Semicolon", "Quote", "_", "_", "Enter", "PageDown"],
         ["LShift", "_", "Z", "X", "C", "V", "B", "N", "M", "Comma", "Dot", "Slash", "RShift", "_", "Up", "End"],
         ["LCtrl", "LAlt", "LGui", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_"],
         ["_", "_", "_", "_", "_", "_", "Space", "_", "_", "_", "_", "MO(1)", "_", "Left", "Down", "Right"]
@@ -37,6 +37,16 @@ keymap = [
         ["_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "MediaPrevTrack", "_", "MediaNextTrack"]
     ],
 ]
+
+[behavior.morse]
+enable_flow_tap = true
+prior_idle_time = "100ms"
+
+[behavior.morse.profiles.nav]
+# any other key pressed while Caps is held resolves it to Ctrl immediately
+hold_on_other_press = true
+# holding Caps this long resolves to Ctrl
+hold_timeout = "150ms"
 
 [storage]
 enabled = false

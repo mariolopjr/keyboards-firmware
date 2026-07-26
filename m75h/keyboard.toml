@@ -48,6 +48,9 @@ hold_on_other_press = true
 # holding Caps this long resolves to Ctrl
 hold_timeout = "150ms"
 
+[rmk]
+debounce_time = 5
+
 [storage]
 enabled = false
 

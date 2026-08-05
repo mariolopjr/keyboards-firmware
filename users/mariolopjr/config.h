@@ -13,18 +13,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-// IWYU pragma: begin_exports
-#include QMK_KEYBOARD_H
-#include "printf.h"
-#include "version.h"
-// IWYU pragma: end_exports
+#pragma once
 
-#define MACRO_TIMER 5
+// how long CTL_ESC has to be held before it resolves to Ctrl
+#undef TAPPING_TERM
+#define TAPPING_TERM 150
 
-// Caps Lock position: tap for Escape, hold for Ctrl
-#define CTL_ESC LCTL_T(KC_ESC)
+// pressing any other key while CTL_ESC is held resolves it to Ctrl right away,
+// instead of waiting out TAPPING_TERM
+#define HOLD_ON_OTHER_KEY_PRESS
 
-enum userspace_custom_keycodes {
-    VRSN = SAFE_RANGE, // Prints QMK Firmware and board info
-    NEW_SAFE_RANGE
-};
+// while typing, CTL_ESC pressed within this long of the previous key is always a
+// tap
+#define FLOW_TAP_TERM 100
+
+#undef DEBOUNCE
+#define DEBOUNCE 5

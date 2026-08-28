@@ -1,0 +1,43 @@
+[package]
+name = "agar"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+description = "RMK firmware for the YDKB Agar keyboard"
+
+[dependencies]
+# local fork branch mariolopjr/add-stm32-clock-tree
+rmk = { path = "../../rmk/rmk", default-features = false }
+cortex-m = { version = "0.7.7", features = ["critical-section-single-core"] }
+# `set-vtor`: the bootloader jumps to 0x08004000 without moving the vector table
+cortex-m-rt = { version = "0.7.5", features = ["set-vtor"] }
+# the matrix waits on the sense line once per position, and 32_768 Hz rounds
+# the shortest wait up to ~30us, or 2.2ms across all 72
+embassy-time = { version = "0.5", features = ["tick-hz-1_000_000"] }
+# `memory-x` is excluded: its layout starts at 0x08000000, where the
+# bootloader lives
+embassy-stm32 = { version = "0.6", features = [
+    "stm32f103cb",
+    "exti",
+    "time-driver-any",
+] }
+embassy-executor = { version = "0.10", features = [
+    "platform-cortex-m",
+    "executor-thread",
+] }
+panic-halt = "1"
+
+[profile.dev]
+codegen-units = 1
+debug = true
+opt-level = 1
+overflow-checks = true
+lto = false
+panic = "unwind"
+
+[profile.release]
+codegen-units = 1
+debug = true
+opt-level = "z"
+overflow-checks = false
+lto = "fat"

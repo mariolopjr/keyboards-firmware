@@ -1,0 +1,11 @@
+[package]
+name = "bin2uf2"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+description = "Convert a raw firmware binary to UF2"
+
+[dependencies]
+
+[profile.release]
+opt-level = 1

@@ -5,6 +5,11 @@ target := "thumbv7em-none-eabihf"
 dfu_id := "0483:df11"
 dfu_addr := "0x08000000"
 
+# agar uses a different chip and bootloader
+agar_target := "thumbv7m-none-eabi"
+agar_base := "0x08004000"
+agar_family := "0x9d5bcf10"
+
 # list available recipes
 default:
   @just --list
@@ -25,6 +30,58 @@ m256wh *args: (build "m256wh" args)
 [group('m256wh')]
 m256wh-flash: (flash "m256wh")
 
+# build the agar
+[group('agar')]
+agar *args:
+  cd agar && cargo build --release {{ args }}
+
+# package the agar as agar/agar.uf2
+[group('agar')]
+agar-uf2: agar
+  cd agar && cargo objcopy --release -- -O binary agar.bin
+  cargo run --release --quiet --manifest-path tools/bin2uf2/Cargo.toml -- \
+    agar/agar.bin agar/agar.uf2 --base {{ agar_base }} --family {{ agar_family }}
+
+# build the agar then copy it onto the bootloader volume once it appears
+[group('agar')]
+agar-flash: agar-uf2
+  #!/usr/bin/env bash
+  set -euo pipefail
+  volumes() {
+      for v in /Volumes/*; do
+          [ -f "$v/INFO_UF2.TXT" ] && echo "$v"
+      done
+      return 0
+  }
+  if [ -z "$(volumes)" ]; then
+      just agar-bootloader
+      until [ -n "$(volumes)" ]; do
+          sleep 1
+      done
+  fi
+  # the marker file does not name the board, and a second UF2 device
+  # mounted at the same time would be ambiguous
+  if [ "$(volumes | wc -l)" -ne 1 ]; then
+      echo 'more than one UF2 volume mounted, unplug the others:' >&2
+      volumes >&2
+      exit 1
+  fi
+  vol="$(volumes)"
+  echo "==> $vol"
+  if cp agar/agar.uf2 "$vol/"; then
+      sync
+  elif [ -d "$vol" ]; then
+      echo 'copy failed' >&2
+      exit 1
+  else
+      echo 'volume detached, the board reset'
+  fi
+
+# print how to reach the agar UF2 bootloader
+[group('agar')]
+agar-bootloader:
+  @echo 'press the flash button or hold Esc while plugging in on stock firmware'
+
 # build one board
 [group('build')]
 build board *args: (_board board)
@@ -39,6 +96,8 @@ all *args:
       echo "==> $board"
       (cd "$board" && cargo build --release {{ args }})
   done
+  echo "==> agar"
+  (cd agar && cargo build --release {{ args }})
 
 # type check without codegen
 [group('build')]
@@ -70,6 +129,9 @@ clean:
       (cd "$board" && cargo clean)
       rm -f "$board/$board.bin"
   done
+  (cd agar && cargo clean)
+  rm -f agar/agar.bin agar/agar.uf2
+  cargo clean --manifest-path tools/bin2uf2/Cargo.toml
 
 # build, wait for the board in DFU mode, then flash it
 [group('flash')]
@@ -107,12 +169,14 @@ doctor:
           status=1
       fi
   done
-  if rustup target list --installed | grep -qx '{{ target }}'; then
-      echo "ok      {{ target }}"
-  else
-      echo "missing {{ target }}, run \`rustup target add {{ target }}\`"
-      status=1
-  fi
+  for t in {{ target }} {{ agar_target }}; do
+      if rustup target list --installed | grep -qx "$t"; then
+          echo "ok      $t"
+      else
+          echo "missing $t, run \`rustup target add $t\`"
+          status=1
+      fi
+  done
   if cargo objcopy --version >/dev/null 2>&1; then
       echo "ok      cargo-binutils"
   else

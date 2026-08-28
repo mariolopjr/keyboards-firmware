@@ -9,8 +9,7 @@ description = "RMK firmware for the Mode m75h (Sonnet) keyboard"
 # `storage` is excluded: on the stm32f401rc the whole-flash driver reports a
 # 128K ERASE_SIZE, so RMK's minimum 2 sectors covers all 256K and erase_all()
 # wipes the running firmware on first boot
-# local fork (branch mariolopjr/add-smt32-bootloader-reboot-support) carrying
-# `register_bootloader_jump`, the keypress-time hook the DFU handoff needs.
+# local fork branch mariolopjr/add-stm32-clock-tree
 rmk = { path = "../../rmk/rmk", default-features = false }
 cortex-m = { version = "0.7.7", features = ["critical-section-single-core"] }
 cortex-m-rt = "0.7.5"

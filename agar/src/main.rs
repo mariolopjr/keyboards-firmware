@@ -9,11 +9,14 @@ use embassy_stm32::usb::{Driver, InterruptHandler};
 use embassy_stm32::{Config, bind_interrupts};
 use embassy_time::Timer;
 use panic_halt as _;
+use rmk::KeymapData;
 use rmk::config::DeviceConfig;
 
+mod keymap;
 mod quiet_release;
 mod shift_matrix;
 
+use keymap::{COL, ROW};
 use quiet_release::QuietReleaseDebouncer;
 use shift_matrix::{ShiftMatrix, TokenPolarity};
 
@@ -93,7 +96,10 @@ async fn main(_spawner: Spawner) {
     let debouncer = QuietReleaseDebouncer::new(RELEASE_QUIET_MS);
     // the keyboard task that runs this, and the USB transport it publishes
     // through, are wired up in a later phase
-    let _matrix = ShiftMatrix::<_, _, _, 9, 8>::new(clock, sense, debouncer, polarity);
+    let _matrix = ShiftMatrix::<_, _, _, ROW, COL>::new(clock, sense, debouncer, polarity);
+
+    let _keymap_data = KeymapData::new(keymap::get_default_keymap());
+    let _behavior_config = keymap::behavior_config();
 
     loop {
         Timer::after_secs(1).await;

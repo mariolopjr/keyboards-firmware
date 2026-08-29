@@ -80,7 +80,7 @@ agar-flash: agar-uf2
 # print how to reach the agar UF2 bootloader
 [group('agar')]
 agar-bootloader:
-  @echo 'press the flash button or hold Esc while plugging in on stock firmware'
+  @echo 'RMK firmware: Fn+B'
 
 # build one board
 [group('build')]

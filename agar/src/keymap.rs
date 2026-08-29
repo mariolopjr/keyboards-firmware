@@ -1,8 +1,8 @@
 //! Layout for a 60% HHKB/tsangan board on the 72-position chain
 //!
 //! Position `p` in the chain maps to row `p / COL`, col `p % COL`. The chain
-//! order is wiring order, so the matrix coordinates have no relation to the
-//! physical rows. The physical board is
+//! order is wiring order. Matrix coordinates have no relation to the physical
+//! rows. The physical board is
 //!
 //! ```text
 //!   Esc  1  2  3  4  5  6  7  8  9  0  -  =  \  `
@@ -23,7 +23,7 @@ use rmk::types::constants::MORSE_PROFILE_MAX_NUM;
 use rmk::types::keycode::{HidKeyCode, KeyCode};
 use rmk::types::modifier::ModifierCombination;
 use rmk::types::morse::{MorseMode, MorseProfile};
-use rmk::{a, k, layer, mo};
+use rmk::{a, k, kbctrl, layer, mo};
 
 pub const ROW: usize = 9;
 pub const COL: usize = 8;
@@ -39,12 +39,12 @@ const XXX: KeyAction = a!(No);
 /// `KeyAction::TapHold` carries an index into this table
 const PROFILES: [MorseProfile; 1] = [
     // NAV: timing for the Escape/Ctrl position. `HoldOnOtherPress` resolves to
-    // Ctrl the moment another key goes down, which is right for a modifier
-    // only ever used with the other hand. `hold_timeout` is what a hold with
-    // no other key costs before it counts as Ctrl
+    // Ctrl the moment another key goes down. That is right for a modifier only
+    // ever used with the other hand. `hold_timeout` is what a hold with no
+    // other key costs before it counts as Ctrl
     //
-    // Flow tap is off here. It is checked before the mode and wins outright,
-    // so with it on, a Ctrl press within `prior_idle_time` of the previous
+    // Flow tap is off here. It is checked before the mode and wins outright.
+    // With it on, a Ctrl press within `prior_idle_time` of the previous
     // keystroke sends Escape and the chord is lost. It guards same-hand rolls
     // on home-row mods and has nothing to do on a dedicated Ctrl key
     MorseProfile::new(None, Some(MorseMode::HoldOnOtherPress), Some(180), None)
@@ -55,9 +55,13 @@ const PROFILES: [MorseProfile; 1] = [
 const NAV: u8 = 0;
 
 // an index past the end of the table resolves to the default profile at
-// runtime, with no error, so bound it here instead
+// runtime with no error. Bound it here instead
 const _: () = assert!((NAV as usize) < PROFILES.len());
 const _: () = assert!(PROFILES.len() <= MORSE_PROFILE_MAX_NUM);
+
+/// Reboots into the UF2 bootloader. `bootloader::register` supplies the
+/// sequence. Without it this keycode only reboots
+const BOOT: KeyAction = kbctrl!(Bootloader);
 
 /// Tap for Escape, hold for Ctrl. The board has no dedicated Caps position,
 /// so this is the HHKB Ctrl below Tab
@@ -68,15 +72,15 @@ const ESC_CTRL: KeyAction = KeyAction::TapHold(
 );
 
 /// RMK reads a debounce window from `[rmk] debounce_time` in a
-/// `keyboard.toml`, and only `DefaultDebouncer` and `FastDebouncer` use it.
-/// This crate has no `keyboard.toml` and does not set `KEYBOARD_TOML_PATH`, so
-/// every one of those constants is the upstream default. The matrix runs
-/// `QuietReleaseDebouncer`, so the window is not in the path either way
+/// `keyboard.toml`. Only `DefaultDebouncer` and `FastDebouncer` use it. This
+/// crate has no `keyboard.toml` and does not set `KEYBOARD_TOML_PATH`, which
+/// leaves every one of those constants at the upstream default. The matrix
+/// runs `QuietReleaseDebouncer`. The window is not in the path either way
 pub fn behavior_config() -> BehaviorConfig {
     let mut morse = MorsesConfig {
         // a tap-hold pressed within `prior_idle_time` of the previous keypress
         // resolves as a tap, for any profile that does not opt out. Pinned
-        // rather than inherited, so an upstream change to the default does not
+        // rather than inherited. An upstream change to the default does not
         // move it
         enable_flow_tap: true,
         prior_idle_time: Duration::from_millis(120),
@@ -92,7 +96,7 @@ pub fn behavior_config() -> BehaviorConfig {
 }
 
 /// Layer 1 puts the function row on the number row and an arrow cluster on the
-/// right of the alpha block
+/// right of the alpha block, and [`BOOT`] on B
 ///
 /// ```text
 ///        [ Up      ] PgUp
@@ -119,7 +123,7 @@ pub const fn get_default_keymap() -> [[[KeyAction; COL]; ROW]; NUM_LAYER] {
             [___,              k!(CapsLock),     ___,              ___,              k!(F1),           k!(F2),           k!(F3),           ___],
             [___,              ___,              ___,              XXX,              XXX,              ___,              ___,              ___],
             [k!(F4),           ___,              k!(F5),           ___,              k!(F6),           k!(F7),           ___,              ___],
-            [___,              ___,              ___,              ___,              ___,              ___,              ___,              ___],
+            [BOOT,             ___,              ___,              ___,              ___,              ___,              ___,              ___],
             [k!(F8),           ___,              k!(F9),           k!(F10),          k!(F11),          ___,              ___,              k!(Up)],
             [k!(Home),         k!(End),          ___,              ___,              ___,              ___,              ___,              ___],
             [k!(F12),          k!(Insert),       k!(Delete),       k!(PageUp),       ___,              ___,              ___,              XXX],

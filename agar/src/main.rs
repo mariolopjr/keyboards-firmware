@@ -12,6 +12,7 @@ use panic_halt as _;
 use rmk::KeymapData;
 use rmk::config::DeviceConfig;
 
+mod bootloader;
 mod keymap;
 mod quiet_release;
 mod shift_matrix;
@@ -36,9 +37,14 @@ bind_interrupts!(struct Irqs {
 
 #[embassy_executor::main]
 async fn main(_spawner: Spawner) {
+    // The bootloader read its request word long before this. Clearing it stops
+    // a stale request from sending the next reset back to the bootloader
+    bootloader::clear_request();
+    bootloader::register();
+
     let mut config = Config::default();
 
-    // The board has no crystal, so the PLL runs off HSI. RM0008 7.3.2:
+    // The board has no crystal. The PLL runs off HSI. RM0008 7.3.2:
     // RCC_CFGR PLLSRC (bit 16) at 0 feeds the PLL from HSI/2 and PLLXTPRE
     // (bit 17) divides HSE only. That leaves 4 MHz x12 as the one way to
     // 48 MHz. embassy calls the fixed /2 `prediv` and panics on any other value

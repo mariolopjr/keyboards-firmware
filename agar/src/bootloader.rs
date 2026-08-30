@@ -1,7 +1,7 @@
 //! Entry into the board's UF2 bootloader
 //!
 //! The bootloader owns 0x08000000..0x08004000 and reads one word of SRAM
-//! before it initialises anything. Write the magic there, reset, and that is
+//! before it initializes anything. Write the magic there, reset, and that is
 //! the whole protocol
 //!
 //! It is not ST's ROM DFU. dfu-util against the ROM bootloader writes from

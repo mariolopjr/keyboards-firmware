@@ -69,6 +69,7 @@ enable_flow_tap = true
 prior_idle_time = "100ms"
 
 [behavior.morse.profiles.nav]
+enable_flow_tap = false
 # any other key pressed while Caps is held resolves it to Ctrl immediately
 hold_on_other_press = true
 # holding Caps this long resolves to Ctrl

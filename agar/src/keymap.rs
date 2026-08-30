@@ -5,7 +5,7 @@
 //! rows. The physical board is
 //!
 //! ```text
-//!   Esc  1  2  3  4  5  6  7  8  9  0  -  =  \  `
+//!   `    1  2  3  4  5  6  7  8  9  0  -  =  \  Del
 //!   Tab  Q  W  E  R  T  Y  U  I  O  P  [  ]  Bspc
 //!   Ctrl A  S  D  F  G  H  J  K  L  ;  '  Enter
 //!   Shift Z X  C  V  B  N  M  ,  .  /  Shift Fn
@@ -95,40 +95,42 @@ pub fn behavior_config() -> BehaviorConfig {
     }
 }
 
-/// Layer 1 puts the function row on the number row and an arrow cluster on the
-/// right of the alpha block, and [`BOOT`] on B
+/// Layer 1 mirrors the Mode boards: [`BOOT`] on Fn+grave and F1..F12 across
+/// the number row
 ///
 /// ```text
-///        [ Up      ] PgUp
-///   L Home  ; Left   ' Right
-///   , End   . PgDn   / Down
+///   left hand          right hand
+///   Q Home  W Up       U VolDn  I Mute  O VolUp
+///   A Left  S Down     J Prev   K Play  L Next
+///   R PgUp  D Right
+///   F PgDn             Bspc Insert, Tab CapsLock
 /// ```
 #[rustfmt::skip]
 pub const fn get_default_keymap() -> [[[KeyAction; COL]; ROW]; NUM_LAYER] {
     [
         layer!([
-          // col 0             col 1             col 2             col 3             col 4             col 5             col 6             col 7
-            [k!(Escape),       k!(Tab),          k!(Q),            k!(W),            k!(Kc1),          k!(Kc2),          k!(Kc3),          k!(E)],
-            [k!(Z),            k!(LGui),         k!(S),            XXX,              XXX,              k!(LShift),       k!(A),            ESC_CTRL],
-            [k!(Kc4),          k!(R),            k!(Kc5),          k!(T),            k!(Kc6),          k!(Kc7),          k!(Y),            k!(U)],
-            [k!(B),            k!(G),            k!(V),            k!(C),            k!(LAlt),         k!(X),            k!(F),            k!(D)],
-            [k!(Kc8),          k!(I),            k!(Kc9),          k!(Kc0),          k!(Minus),        k!(O),            k!(P),            k!(LeftBracket)],
-            [k!(L),            k!(Comma),        k!(M),            k!(Space),        k!(N),            k!(K),            k!(J),            k!(H)],
-            [k!(Equal),        k!(Backslash),    k!(Grave),        k!(RightBracket), k!(Backspace),    k!(Enter),        k!(RShift),       XXX],
-            [mo!(1),           XXX,              k!(RGui),         k!(RAlt),         k!(Slash),        k!(Dot),          k!(Quote),        k!(Semicolon)],
-            [XXX,              XXX,              XXX,              XXX,              XXX,              XXX,              XXX,              XXX]
+          // col 0               col 1               col 2               col 3               col 4               col 5               col 6               col 7
+            [k!(Grave),          k!(Tab),            k!(Q),              k!(W),              k!(Kc1),            k!(Kc2),            k!(Kc3),            k!(E)],
+            [k!(Z),              k!(LAlt),           k!(S),              XXX,                XXX,                k!(LShift),         k!(A),              ESC_CTRL],
+            [k!(Kc4),            k!(R),              k!(Kc5),            k!(T),              k!(Kc6),            k!(Kc7),            k!(Y),              k!(U)],
+            [k!(B),              k!(G),              k!(V),              k!(C),              k!(LGui),           k!(X),              k!(F),              k!(D)],
+            [k!(Kc8),            k!(I),              k!(Kc9),            k!(Kc0),            k!(Minus),          k!(O),              k!(P),              k!(LeftBracket)],
+            [k!(L),              k!(Comma),          k!(M),              k!(Space),          k!(N),              k!(K),              k!(J),              k!(H)],
+            [k!(Equal),          k!(Backslash),      k!(Delete),         k!(RightBracket),   k!(Backspace),      k!(Enter),          k!(RShift),         XXX],
+            [mo!(1),             XXX,                k!(RAlt),           k!(RGui),           k!(Slash),          k!(Dot),            k!(Quote),          k!(Semicolon)],
+            [XXX,                XXX,                XXX,                XXX,                XXX,                XXX,                XXX,                XXX]
         ]),
         layer!([
-          // col 0             col 1             col 2             col 3             col 4             col 5             col 6             col 7
-            [___,              k!(CapsLock),     ___,              ___,              k!(F1),           k!(F2),           k!(F3),           ___],
-            [___,              ___,              ___,              XXX,              XXX,              ___,              ___,              ___],
-            [k!(F4),           ___,              k!(F5),           ___,              k!(F6),           k!(F7),           ___,              ___],
-            [BOOT,             ___,              ___,              ___,              ___,              ___,              ___,              ___],
-            [k!(F8),           ___,              k!(F9),           k!(F10),          k!(F11),          ___,              ___,              k!(Up)],
-            [k!(Home),         k!(End),          ___,              ___,              ___,              ___,              ___,              ___],
-            [k!(F12),          k!(Insert),       k!(Delete),       k!(PageUp),       ___,              ___,              ___,              XXX],
-            [___,              XXX,              ___,              ___,              k!(Down),         k!(PageDown),     k!(Right),        k!(Left)],
-            [XXX,              XXX,              XXX,              XXX,              XXX,              XXX,              XXX,              XXX]
+          // col 0               col 1               col 2               col 3               col 4               col 5               col 6               col 7
+            [BOOT,               k!(CapsLock),       k!(Home),           k!(Up),             k!(F1),             k!(F2),             k!(F3),             k!(End)],
+            [___,                ___,                k!(Down),           XXX,                XXX,                ___,                k!(Left),           ___],
+            [k!(F4),             k!(PageUp),         k!(F5),             ___,                k!(F6),             k!(F7),             ___,                k!(AudioVolDown)],
+            [___,                ___,                ___,                ___,                ___,                ___,                k!(PageDown),       k!(Right)],
+            [k!(F8),             k!(AudioMute),      k!(F9),             k!(F10),            k!(F11),            k!(AudioVolUp),     ___,                ___],
+            [k!(MediaNextTrack), ___,                ___,                ___,                ___,                k!(MediaPlayPause), k!(MediaPrevTrack), ___],
+            [k!(F12),            ___,                ___,                ___,                k!(Insert),         ___,                ___,                XXX],
+            [___,                XXX,                ___,                ___,                ___,                ___,                ___,                ___],
+            [XXX,                XXX,                XXX,                XXX,                XXX,                XXX,                XXX,                XXX]
         ]),
     ]
 }
